@@ -39,7 +39,7 @@ lyricNotes:
     explanation: "Aqui, periferia se refere aos bairros populares nas bordas de São Paulo, onde vivem muitas das famílias mais pobres da cidade."
   - time: "00:54.04"
     language: "en"
-    text: "outskirts"
+    text: "ghetto"
     explanation: "Aqui, periferia se refere aos bairros populares nas bordas de São Paulo, onde vivem muitas das famílias mais pobres da cidade."
   - time: "01:05.24"
     language: "pt-br"

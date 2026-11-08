@@ -39,7 +39,7 @@ lyricNotes:
     explanation: "Here, periferia means the working-class neighborhoods on the edges of São Paulo, where many of the city’s poorest families live."
   - time: "00:54.04"
     language: "en"
-    text: "outskirts"
+    text: "ghetto"
     explanation: "Here, periferia means the working-class neighborhoods on the edges of São Paulo, where many of the city’s poorest families live."
   - time: "01:05.24"
     language: "pt-br"

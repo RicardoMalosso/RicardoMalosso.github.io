@@ -210,6 +210,42 @@ export default function LyricsPlayer({ config, onDuration, lyricNotes = [], orig
     return () => observer.disconnect();
   }, [current, center, expanded, rows]);
   const stopFollowing = () => { if (expanded) setFollowing(false); };
+  const draggingLyrics = useRef(false);
+  const startLyricSelection = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (event.button !== 0 || !(event.target instanceof Element)) return;
+    draggingLyrics.current = false;
+    const column = event.target.closest('.sync-en, .sync-pt');
+    const lyrics = event.currentTarget;
+    if (column && lyrics.contains(column)) {
+      lyrics.dataset.selectionColumn = column.classList.contains('sync-en') ? 'en' : 'pt';
+    } else {
+      delete lyrics.dataset.selectionColumn;
+    }
+  };
+  const copyLyrics = (event: React.ClipboardEvent<HTMLDivElement>) => {
+    const lyrics = event.currentTarget;
+    const selection = window.getSelection();
+    const column = lyrics.dataset.selectionColumn;
+    if (!column || !selection || selection.isCollapsed || !lyrics.contains(selection.anchorNode)) return;
+
+    const selected = selection.getRangeAt(0);
+    const lines = [];
+    for (const cell of lyrics.querySelectorAll(`.sync-${column}`)) {
+      if (!selected.intersectsNode(cell)) continue;
+      const line = document.createRange();
+      line.selectNodeContents(cell);
+      if (line.compareBoundaryPoints(Range.START_TO_START, selected) < 0) {
+        line.setStart(selected.startContainer, selected.startOffset);
+      }
+      if (line.compareBoundaryPoints(Range.END_TO_END, selected) > 0) {
+        line.setEnd(selected.endContainer, selected.endOffset);
+      }
+      const text = line.toString();
+      if (text) lines.push(text);
+    }
+    event.clipboardData.setData('text/plain', lines.join('\n'));
+    event.preventDefault();
+  };
   const changeVolume = (value: number) => { const p = player.current; if (!p || !ready) return; volumeLockUntil.current = Date.now() + 1000; p.setVolume(value); if (value > 0 && p.isMuted()) p.unMute(); setVolume(value); setMuted(value === 0); };
   const toggleMute = () => { const p = player.current; if (!p || !ready) return; volumeLockUntil.current = Date.now() + 1000; if (p.isMuted() || p.getVolume() === 0) { if (p.getVolume() === 0) { p.setVolume(50); setVolume(50); } p.unMute(); setMuted(false); } else { p.mute(); setMuted(true); } };
   return <section className="music-player" aria-label={t('lyricsPlayer')}>
@@ -231,8 +267,17 @@ export default function LyricsPlayer({ config, onDuration, lyricNotes = [], orig
     </div>
     <div ref={lyricsHeader} className="lyric-controls"><div className="lyric-column-headings"><span>{t('timestamp')}</span>{config.lrc !== undefined ? <><span></span><span>{config.lyricLabel || t('lyricsPlayer')}</span></> : <><span>🇨🇦 English</span>{originalLanguage === 'es-PR' ? <span className="mixed-lyrics-heading">🇵🇷/🇧🇷 Español/Portuguese</span> : <span>🇧🇷 Português</span>}</>}</div>{expanded && !following && <button onClick={() => setFollowing(true)}>{t('followLine')}</button>}</div>
     {loadError && <p className="notice" role="status">{t(loadError)}</p>}
-    <div ref={lyricsRef} className={`synced-lyrics ${expanded ? 'is-expanded' : 'is-compact'}`} onWheel={stopFollowing} onTouchMove={stopFollowing} onKeyDown={e => {if (['PageUp','PageDown','Home','End'].includes(e.key)) stopFollowing();}} tabIndex={expanded ? 0 : undefined} aria-label={t('lyricsPlayer')}>
-      <span aria-hidden="true" className="lyric-highlight" style={highlight ? { transform: `translateY(${highlight.top}px)`, height: highlight.height, opacity: 1 } : { opacity: 0 }}/>{displayed.map(({row, index}) => <div role="button" tabIndex={0} onKeyDown={e => {if (e.target === e.currentTarget && (e.key === "Enter" || e.key === " ")) {e.preventDefault(); e.stopPropagation(); seek(videoTimeForLyric(row.start, offsetMs));setFollowing(true);}}} className={`sync-row ${current === index ? 'is-current' : ''}`} data-current={current === index} key={`${row.start}-${index}`} onClick={() => {seek(videoTimeForLyric(row.start, offsetMs));setFollowing(true);}} aria-label={`${formatTime(videoTimeForLyric(row.start, offsetMs))} ${row.en?.text || ''} ${row.pt?.text || ''}`}><span className="sync-time mono">{formatTime(videoTimeForLyric(row.start, offsetMs))}</span><span className="sync-en" lang="en">{annotated(row.en?.text || '', row.en?.start ?? row.start, 'en')}</span><span className={originalLanguage === 'es-PR' ? 'sync-pt mixed-lyrics-text' : 'sync-pt'} lang={config.lrc === undefined ? originalLanguage : undefined}>{annotated(row.pt?.text || '', row.pt?.start ?? row.start, 'pt-br')}</span></div>)}
+    <div ref={lyricsRef} className={`synced-lyrics ${expanded ? 'is-expanded' : 'is-compact'}`} onMouseDown={startLyricSelection} onMouseMove={e => {
+      const selection = window.getSelection();
+      if (e.buttons === 1 && selection && !selection.isCollapsed && e.currentTarget.contains(selection.anchorNode)) {
+        draggingLyrics.current = true;
+      }
+    }} onCopy={copyLyrics} onWheel={stopFollowing} onTouchMove={stopFollowing} onKeyDown={e => {if (['PageUp','PageDown','Home','End'].includes(e.key)) stopFollowing();}} tabIndex={expanded ? 0 : undefined} aria-label={t('lyricsPlayer')}>
+      <span aria-hidden="true" className="lyric-highlight" style={highlight ? { transform: `translateY(${highlight.top}px)`, height: highlight.height, opacity: 1 } : { opacity: 0 }}/>{displayed.map(({row, index}) => <div role="button" tabIndex={0} onKeyDown={e => {if (e.target === e.currentTarget && (e.key === "Enter" || e.key === " ")) {e.preventDefault(); e.stopPropagation(); seek(videoTimeForLyric(row.start, offsetMs));setFollowing(true);}}} className={`sync-row ${current === index ? 'is-current' : ''}`} data-current={current === index} key={`${row.start}-${index}`} onClick={e => {
+        if (e.detail && draggingLyrics.current) return;
+        seek(videoTimeForLyric(row.start, offsetMs));
+        setFollowing(true);
+      }} aria-label={`${formatTime(videoTimeForLyric(row.start, offsetMs))} ${row.en?.text || ''} ${row.pt?.text || ''}`}><span className="sync-time mono">{formatTime(videoTimeForLyric(row.start, offsetMs))}</span><span className="sync-en" lang="en">{annotated(row.en?.text || '', row.en?.start ?? row.start, 'en')}</span><span className={originalLanguage === 'es-PR' ? 'sync-pt mixed-lyrics-text' : 'sync-pt'} lang={config.lrc === undefined ? originalLanguage : undefined}>{annotated(row.pt?.text || '', row.pt?.start ?? row.start, 'pt-br')}</span></div>)}
       {!rows.length && !loadError && <p className="player-status">{t(config.lrc !== undefined ? 'chooseSyncedLyrics' : 'loadingLyrics')}</p>}
     </div>
     <div className="lyrics-sync" role="group" aria-label={t('syncPrompt')}>

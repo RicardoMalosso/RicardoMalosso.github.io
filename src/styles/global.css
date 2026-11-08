@@ -1608,6 +1608,15 @@ main:focus {
     text-align: right
 }
 
+.synced-lyrics[data-selection-column] .sync-time::selection,
+.synced-lyrics[data-selection-column="en"] .sync-pt::selection,
+.synced-lyrics[data-selection-column="en"] .sync-pt *::selection,
+.synced-lyrics[data-selection-column="pt"] .sync-en::selection,
+.synced-lyrics[data-selection-column="pt"] .sync-en *::selection {
+    background: transparent;
+    color: inherit
+}
+
 .player-caption {
     font-size: 11px;
     color: var(--muted);

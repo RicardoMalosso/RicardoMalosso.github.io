@@ -4,6 +4,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { loadContent } from '../scripts/content.mjs';
 import { routes, base, alternatePath } from '../.ssr/entry-server.js';
+import os from 'node:os';
 const outputFor = route => path.join('dist', route, 'index.html');
 test('all declared routes contain prerendered HTML and locale metadata', () => {
   for (const route of routes) {
@@ -40,7 +41,7 @@ test('each published entry is rendered in both languages and translations retain
   assert.equal(alternatePath('/en/blog/untranslated/', 'pt-br'), '/pt-br/blog/?translation=missing');
 });
 test('content validation rejects duplicate slugs', () => {
-  const temp = fs.mkdtempSync('/tmp/pacblog-content-');
+  const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'pacblog-content-'));
   try {
     fs.mkdirSync(path.join(temp, 'blog')); fs.mkdirSync(path.join(temp, 'music'));
     const data = fs.readFileSync('content/blog/welcome.en.md');
@@ -160,7 +161,7 @@ test('YouTube URLs, LRC timing and duration-ranked matches', async () => {
 });
 
 test('lyrics template is accepted in blog posts and normalizes YouTube URLs', () => {
-  const temp = fs.mkdtempSync('/tmp/pacblog-template-');
+  const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'pacblog-template-'));
   try {
     fs.mkdirSync(path.join(temp, 'blog')); fs.mkdirSync(path.join(temp, 'music'));
     fs.writeFileSync(path.join(temp, 'blog/song.md'), fs.readFileSync('content/music/lyric-demo.en.md'));

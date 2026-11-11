@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "content": "node scripts/content.mjs",
+    "content": "node scripts/build-content.mjs",
     "predev": "npm run content",
     "dev": "vite --host 0.0.0.0",
     "build": "npm run content && tsc --noEmit && vite build && vite build --ssr src/entry-server.tsx --outDir .ssr && node scripts/prerender.mjs",

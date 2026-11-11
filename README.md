@@ -6,7 +6,7 @@ Ricardo Malosso’s bilingual portfolio, blog, music pages, and browser experime
 
 ## Stack
 
-React + TypeScript, Vite, React Router, i18next / react-i18next, and Markdown with GFM. The build renders every known route to HTML with React DOM Server. React hydrates those files in the browser for client navigation and interactions. **No runtime server, database, or ChatGPT Sites hosting.**
+React + TypeScript, Vite, React Router, i18next / react-i18next, and Markdown with GFM. The build renders every known route to HTML with React DOM Server. React hydrates those files in the browser for client navigation and interactions. Published blog/music content is managed in Supabase and fetched during the Pages build; visitors receive static pages. See [Supabase content](docs/supabase-content.md) for import verification, access, and rollback.
 
 ## Run locally
 

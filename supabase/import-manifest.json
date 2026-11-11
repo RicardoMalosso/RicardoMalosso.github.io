@@ -1,0 +1,333 @@
+{
+  "sourceCommit": "df8b3320535ef715ec3f779ab1a692e11e6892bd",
+  "files": [
+    {
+      "path": "content/blog/welcome.en.md",
+      "sha256": "c3c40f45d6c9634fd4efc04b1d2d65ef458b6a47e00853cef4b8ec0f0be5cba9"
+    },
+    {
+      "path": "content/blog/welcome.pt-br.md",
+      "sha256": "9a10985f1152b7a0396fff6b8666838cf2cb07929d0dceb6f36e816049de30fe"
+    },
+    {
+      "path": "content/music/aguas-de-marco.en.md",
+      "sha256": "654e68758447264807278b63a2d767822ce2022c3d03311b57d7621fa80bece5"
+    },
+    {
+      "path": "content/music/aguas-de-marco.pt-br.md",
+      "sha256": "968bb730459b9c5d81c2322efbe897956ce5567228defae0f1110c87dc6e26f7"
+    },
+    {
+      "path": "content/music/ak-do-guevara.en.md",
+      "sha256": "c7ef1ffb51776f331d379235b47235637301f2674ae4595127150d25efaca6c8"
+    },
+    {
+      "path": "content/music/ak-do-guevara.pt-br.md",
+      "sha256": "5245c5915513e2c5cf1f046d7af8c927de64f00c3dfe6537c9092c45e75fd3a8"
+    },
+    {
+      "path": "content/music/amor-e-sexo.en.md",
+      "sha256": "fd2b2d824cb35460ff32e7599da9153fe8043618ae0897c66b3163ccdded59a2"
+    },
+    {
+      "path": "content/music/amor-e-sexo.pt-br.md",
+      "sha256": "0981b97c600d3ee1cf43d0cfd68c065c62789cf5377381627ebb9e4323b2391e"
+    },
+    {
+      "path": "content/music/apenas-um-rapaz-latino-americano.en.md",
+      "sha256": "3bf9556e9717c0f61289ab186e88cc12f871fa2a02600199f3d716de614879b9"
+    },
+    {
+      "path": "content/music/apenas-um-rapaz-latino-americano.pt-br.md",
+      "sha256": "103703c2dce74cde4c5c1d8735c4bf3293e5df65986ea291b89d44d255c5f7f0"
+    },
+    {
+      "path": "content/music/apesar-de-voce.en.md",
+      "sha256": "0f1788e26f1f0dbc2ac0ddf87d1e4637c1679f871c7b447f33fa69abf384f994"
+    },
+    {
+      "path": "content/music/apesar-de-voce.pt-br.md",
+      "sha256": "eb49700c5ba7f62a7ad80c92159321bb03d9aeb1739f3267a1f4be560a203b77"
+    },
+    {
+      "path": "content/music/aquela-fe.en.md",
+      "sha256": "903ca8dde2dc302899121a4c1aa528b9bbf56d9807a492202b65317c76879502"
+    },
+    {
+      "path": "content/music/aquela-fe.pt-br.md",
+      "sha256": "d2c09f6dcfc41bea73ae9d0813515828ad99a76e2f1c60e0e0a67cbddac71bc7"
+    },
+    {
+      "path": "content/music/cais.en.md",
+      "sha256": "89ef6ff47404efb6f39a6aa11a270dbf219a34b3e86c2399ec0e88a89c89a7bd"
+    },
+    {
+      "path": "content/music/canteiros.en.md",
+      "sha256": "d41391ec115c51f4e749058264c38cb261e3276a514561515e319070a30423af"
+    },
+    {
+      "path": "content/music/canteiros.pt-br.md",
+      "sha256": "eb73f78b612d6c99ebd01c6113acaf7814269639fe02b101a28c7a3977f86c7a"
+    },
+    {
+      "path": "content/music/cinco-minutos.en.md",
+      "sha256": "2d8bf911a68d53ad90315a5a32ba38f1e63dc6278ae2c72f73b1ed427486e828"
+    },
+    {
+      "path": "content/music/cinco-minutos.pt-br.md",
+      "sha256": "9886431d799ea406fa0fb53c5ab2e3a979ce459b4c6c96ee43ab0b78e57483ef"
+    },
+    {
+      "path": "content/music/construcao.en.md",
+      "sha256": "06c664ab5266184a9af123275a5c47f2e56c0e1d1fcf0ea4cd4decc547af7d16"
+    },
+    {
+      "path": "content/music/cotidiano.en.md",
+      "sha256": "dfa68293f71d753fc17cfc0945b399f1a427d86a05a22ca7602502f07bc1b0c4"
+    },
+    {
+      "path": "content/music/cotidiano.pt-br.md",
+      "sha256": "407492df13d5053911bc6f7a2216ec7044a3750d8e82b3f91d65bfed7109d28c"
+    },
+    {
+      "path": "content/music/jao.en.md",
+      "sha256": "6c4dd1cf92dfaa91197c7dcbd827a90ad283212e6c2356ad11b3a086332e4999"
+    },
+    {
+      "path": "content/music/jao.pt-br.md",
+      "sha256": "8a3f3f87dd0be24f45c933afcec23fca3309f82ffa38655787ca7642279e139c"
+    },
+    {
+      "path": "content/music/latinoamerica.en.md",
+      "sha256": "8b311133dd224f18ab9499344438dbbe2207971b64ba0001a5ee291e7d53b45a"
+    },
+    {
+      "path": "content/music/latinoamerica.pt-br.md",
+      "sha256": "729503786048f5395759847f4f7430e26e376af644293a92155a8008e58f0952"
+    },
+    {
+      "path": "content/music/lyric-demo.en.md",
+      "sha256": "5a244cb91a465077ac97f20d129995b4a403277eba1bd9b18915f75508b7e627"
+    },
+    {
+      "path": "content/music/lyric-demo.pt-br.md",
+      "sha256": "4b04df7ed99c26b846b78b7dec55f9533cee7f2daf021ef0ddbac6dcadbe22d3"
+    },
+    {
+      "path": "content/music/mil-faces-de-um-homem-leal-marighella.en.md",
+      "sha256": "f208c2413018c9646359c8d460222af1c28f1b2891401c6b0b8414b48f9c30ef"
+    },
+    {
+      "path": "content/music/mil-faces-de-um-homem-leal-marighella.pt-br.md",
+      "sha256": "df798b7dc59777271befb1575751206dfe77764933ecc9e1b00a400194ad8eef"
+    },
+    {
+      "path": "content/music/mundo-animal.en.md",
+      "sha256": "283d7f15691f40a8372f1890dc0d9af95c61c762c5e26d3382221787068edea2"
+    },
+    {
+      "path": "content/music/mundo-animal.pt-br.md",
+      "sha256": "cb5a8825b5e0fbdfc02c9746f7683fcb8fc5b630574c40b55c1cab5fcf8dac48"
+    },
+    {
+      "path": "content/music/naquela-mesa.en.md",
+      "sha256": "a3aa61ceb4dd7375aceb0afc7d22f69d13e780641ba788b23cba7581f4041e8e"
+    },
+    {
+      "path": "content/music/naquela-mesa.pt-br.md",
+      "sha256": "e07ba3faec114554c9e3d07f70a73214d5c519ba25b895204f138212bc309947"
+    },
+    {
+      "path": "content/music/o-mundo-e-um-moinho.en.md",
+      "sha256": "adf1df3a0b5314714fa62bf1d535f47f0def626228ac74f98456c2a119313e4e"
+    },
+    {
+      "path": "content/music/o-mundo-e-um-moinho.pt-br.md",
+      "sha256": "1264b36005aead7646ecc18cff4120ef62622ad26508c89bfcf471c4cbd29f70"
+    },
+    {
+      "path": "content/music/preciso-me-encontrar.en.md",
+      "sha256": "4ae9692d97711c37457d1211dbf9ef6199817d6ae9b1e3831942bc0f29b84c38"
+    },
+    {
+      "path": "content/music/preciso-me-encontrar.pt-br.md",
+      "sha256": "43f75973e30b72dbf4d1a5f26136ce045c88d515930b514ed8f403d06173b880"
+    },
+    {
+      "path": "content/music/um-girassol-da-cor-do-seu-cabelo.en.md",
+      "sha256": "98598a7c112126ffff8033e680db3dc55e41560d9295d7d3ae5a0ce542952932"
+    },
+    {
+      "path": "content/music/um-girassol-da-cor-do-seu-cabelo.pt-br.md",
+      "sha256": "3446563cbf5b488b2e35fd2beb79c7cd761afb9c8cc687963c78ace31a9ef606"
+    },
+    {
+      "path": "public/lyrics/aguas-de-marco/en.lrc",
+      "sha256": "ac391677cd3b87a1f9f170701554ce99a134f4006a13d1d7cee89c3e9b2b20a5"
+    },
+    {
+      "path": "public/lyrics/aguas-de-marco/pt-br.lrc",
+      "sha256": "db49ac55120f4b2db76f67c12f0af45d7dd6e284b1f1d2ac46dfd637d11042a4"
+    },
+    {
+      "path": "public/lyrics/ak-do-guevara/en.lrc",
+      "sha256": "45d0821504c641f3dd7b43a4c604cf61b945f578148508f876bf3b9de2cbfac5"
+    },
+    {
+      "path": "public/lyrics/ak-do-guevara/pt-br.lrc",
+      "sha256": "570b4a810b4c6063eb746f4d62c9871a9fcfe790c18c85fc649f860888c3074c"
+    },
+    {
+      "path": "public/lyrics/amor-e-sexo/en.lrc",
+      "sha256": "de8cc6be962cd69daa2cc8c29becb900a1be615ce536d6e02536554f9b35a5ae"
+    },
+    {
+      "path": "public/lyrics/amor-e-sexo/pt-br.lrc",
+      "sha256": "05649bbf29311adab79628fac0c4a44f700cfd0b24369d4ec40d2fd3e2691ee7"
+    },
+    {
+      "path": "public/lyrics/apenas-um-rapaz-latino-americano/en.lrc",
+      "sha256": "be40ddee7f07354823c33e217f353fae2415dcd520b861841426a75754dccbbd"
+    },
+    {
+      "path": "public/lyrics/apenas-um-rapaz-latino-americano/pt-br.lrc",
+      "sha256": "407fcf329d6ad373880e0a3cf6b597be156ac4ad142fb67c6422d1fdef07f5ad"
+    },
+    {
+      "path": "public/lyrics/apesar-de-voce/en.lrc",
+      "sha256": "9032f786c3b7946385cb1750b04159ad98da6daef793f2410252630e09104379"
+    },
+    {
+      "path": "public/lyrics/apesar-de-voce/pt-br.lrc",
+      "sha256": "1759dd56721aee7b90643682d945d07ba8380b39a126aa4daef53fd2deba7021"
+    },
+    {
+      "path": "public/lyrics/aquela-fe/en.lrc",
+      "sha256": "f8c01368abd4a9be05877081da7c48d6adc0780276ad507e56d9c07c4dbd350e"
+    },
+    {
+      "path": "public/lyrics/aquela-fe/pt-br.lrc",
+      "sha256": "7bff9bd7835f5cf44df189453b9575775eb2e3dea292aea370532cae9984fab4"
+    },
+    {
+      "path": "public/lyrics/cais/en.lrc",
+      "sha256": "65fa27086a143dcc6c8cc20ef986fcea9d663f560299e963060322362b0eaa87"
+    },
+    {
+      "path": "public/lyrics/cais/pt-br.lrc",
+      "sha256": "fa52395ae6522da790396bf9ee76b562e1dd8f066f0f4b502993b38d7de6beab"
+    },
+    {
+      "path": "public/lyrics/canteiros/en.lrc",
+      "sha256": "31d37591deab4d90c02901112093ef88ed5627b770cb9065a463134a70c8fd02"
+    },
+    {
+      "path": "public/lyrics/canteiros/pt-br.lrc",
+      "sha256": "b9ee572238e789d9e9206bb95bdfd9d9b452a0c371d93ddabd27197816f77eb7"
+    },
+    {
+      "path": "public/lyrics/cinco-minutos/en.lrc",
+      "sha256": "4fc5a78f430c25adfcf1c1a374ed4cc4e650aa4534c29c4b7abbaa4b582cbd80"
+    },
+    {
+      "path": "public/lyrics/cinco-minutos/pt-br.lrc",
+      "sha256": "4fc5a78f430c25adfcf1c1a374ed4cc4e650aa4534c29c4b7abbaa4b582cbd80"
+    },
+    {
+      "path": "public/lyrics/construcao/en.lrc",
+      "sha256": "d5dbc322c4a9f5b392fd00165a82565edece0dd9f80c4ff265cd9360ac651201"
+    },
+    {
+      "path": "public/lyrics/construcao/pt-br.lrc",
+      "sha256": "278f785c811a04a81f13af171f4eb1886f971af8e34c4c25fbb12bad44fe0c53"
+    },
+    {
+      "path": "public/lyrics/cotidiano/en.lrc",
+      "sha256": "e27d92c1e9543e554d451b4783981a2bf610e59bc1c71dba1ebee9e8cec4e524"
+    },
+    {
+      "path": "public/lyrics/cotidiano/pt-br.lrc",
+      "sha256": "f875b2f6f76c962f3efc404ee5c69cdd75dc1645bb7ff475823de4cb6d9edf9c"
+    },
+    {
+      "path": "public/lyrics/demo/en.lrc",
+      "sha256": "3b2973dbc33dbfb79c1397ad768c44a00dcdec75cfc9450550ed90edb383bb43"
+    },
+    {
+      "path": "public/lyrics/demo/en.srt",
+      "sha256": "d498a9fb3908a800fd7463c113ff69a8f86b431f653d67d6d8b1d434e36f0f79"
+    },
+    {
+      "path": "public/lyrics/demo/pt-br.lrc",
+      "sha256": "510c0ded2264a2c867de8bdce3aa3e58991d2e64640cb209568ff5de7ac66b26"
+    },
+    {
+      "path": "public/lyrics/demo/pt-br.srt",
+      "sha256": "d5395b27739ad64d84867b65b2b160b59effbc525645a64a0452bb9dd4054e99"
+    },
+    {
+      "path": "public/lyrics/jao/en.lrc",
+      "sha256": "b23157e172d40c7a807ef839832ca2092cb4bf12bbb39f11d7ec7df9fb8e8f55"
+    },
+    {
+      "path": "public/lyrics/jao/pt-br.lrc",
+      "sha256": "8c0d1fbc515a896e51b92b1d3cfdde17132f275caa7257135817ae02c816ede7"
+    },
+    {
+      "path": "public/lyrics/latinoamerica/en.lrc",
+      "sha256": "863696e4ce1d24882da8459809c6860e8911f8d4f65a73eb5ef9bcff7f3e0dfc"
+    },
+    {
+      "path": "public/lyrics/latinoamerica/original.lrc",
+      "sha256": "25c5f1b5e42df8f7b15931a0be57a63902dad118e6fbb1e9955d1ecce7f45d28"
+    },
+    {
+      "path": "public/lyrics/mil-faces-de-um-homem-leal-marighella/en.lrc",
+      "sha256": "cf26e3e2274a2b9889bcdfde64e90be8f501d67769a9c46ef573da604712e57c"
+    },
+    {
+      "path": "public/lyrics/mil-faces-de-um-homem-leal-marighella/pt-br.lrc",
+      "sha256": "9e8bb839fbf4972ba5db4568e6a89169c9ab1d387ceedc35cffabca5f818d8d6"
+    },
+    {
+      "path": "public/lyrics/mundo-animal/en.lrc",
+      "sha256": "97c1a334222fd674042d57e95d78f12d030153b510f75f68f1efc013a8cfcc83"
+    },
+    {
+      "path": "public/lyrics/mundo-animal/pt-br.lrc",
+      "sha256": "40fd275d6444dae3621052db02d125deec24c49f52807db6aad6e05987442290"
+    },
+    {
+      "path": "public/lyrics/naquela-mesa/en.lrc",
+      "sha256": "3d6a1beab77686aeb110a9856036822dde563bbe3b2555966df4773d6ac88f79"
+    },
+    {
+      "path": "public/lyrics/naquela-mesa/pt-br.lrc",
+      "sha256": "9199442384f51bd1ed3cd9279d501d3bfc9c95534f8fa14a74bb6604e1de8d40"
+    },
+    {
+      "path": "public/lyrics/o-mundo-e-um-moinho/en.lrc",
+      "sha256": "c5e0463a2151a7640e1997017164d2e7be0db1286af98cc2a4afd83579828e80"
+    },
+    {
+      "path": "public/lyrics/o-mundo-e-um-moinho/pt-br.lrc",
+      "sha256": "8da019b5421e081b48982be5418a7a0938ab10c9ae1d5f3f3e67ebfcd65c996e"
+    },
+    {
+      "path": "public/lyrics/preciso-me-encontrar/en.lrc",
+      "sha256": "c213d3de7d790a62ac7a3c6773565a181cefe7b8eec5b29b774fb5eb49d07888"
+    },
+    {
+      "path": "public/lyrics/preciso-me-encontrar/pt-br.lrc",
+      "sha256": "62bfe082fcbc4bfc001e99afa1a9f3884b29476d6bde9af22bbba4b6b56c45dc"
+    },
+    {
+      "path": "public/lyrics/um-girassol-da-cor-do-seu-cabelo/en.lrc",
+      "sha256": "9afbad527ebf87a55e13bfb18a22bd4c48d90fd54b2aa7c2a0dc33df9ccff525"
+    },
+    {
+      "path": "public/lyrics/um-girassol-da-cor-do-seu-cabelo/pt-br.lrc",
+      "sha256": "22e96cba85f6485109e0bd8e79516292bcec903951965c31a364ce3c90a06822"
+    }
+  ]
+}

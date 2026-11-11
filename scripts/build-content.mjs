@@ -1,8 +1,10 @@
 import fs from 'node:fs';
+import {loadRelease} from './content-release.mjs';
 import {loadContent} from './content.mjs';
 import {loadSupabaseContent} from './supabase-content.mjs';
 const source=process.env.CONTENT_SOURCE||'files';
-if(!['files','supabase'].includes(source))throw Error('Unsupported CONTENT_SOURCE');
-const entries=source==='supabase'?await loadSupabaseContent():loadContent();
+if(!['files','supabase','release'].includes(source))throw Error('Unsupported CONTENT_SOURCE');
+if(source!=='release')fs.rmSync('.content-release',{recursive:true,force:true});
+const entries=source==='release'?await loadRelease():source==='supabase'?await loadSupabaseContent():loadContent();
 fs.writeFileSync('src/content.generated.json',JSON.stringify(entries,null,2)+'\n');
 console.log(`Validated ${entries.length} content entries from ${source}.`);

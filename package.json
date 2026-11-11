@@ -12,6 +12,7 @@
     "test": "node --test tests/*.test.mjs"
   },
   "dependencies": {
+    "@supabase/supabase-js": "2.119.0",
     "i18next": "^25.6.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
@@ -21,6 +22,7 @@
     "remark-gfm": "^4.0.1"
   },
   "devDependencies": {
+    "@electric-sql/pglite": "0.5.16",
     "@types/node": "^24.19.2",
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",

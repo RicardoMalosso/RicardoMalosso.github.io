@@ -1,14 +1,22 @@
 name: Build and deploy GitHub Pages
+run-name: ${{ inputs.publication_id && format('Publish {0}', inputs.publication_id) || 'Build portfolio' }}
 on:
   push:
     branches: [main]
   pull_request:
+  schedule:
+    - cron: '3-58/5 * * * *'
   workflow_dispatch:
+    inputs:
+      publication_id:
+        description: Optional immutable publication UUID (blank selects latest)
+        required: false
+        type: string
 permissions:
   contents: read
 concurrency:
   group: pages-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -19,16 +27,27 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
+      - name: Select publication
+        id: publication
+        run: node scripts/check-publication.mjs
+        env:
+          PUBLICATION_ID: ${{ inputs.publication_id }}
       - run: npm run build
+        if: github.event_name != 'schedule' || steps.publication.outputs.changed == 'true'
         env:
           BASE_PATH: /
-          CONTENT_SOURCE: supabase
+          CONTENT_SOURCE: release
+          PUBLICATION_ID: ${{ steps.publication.outputs.id }}
       - run: npm test
+        if: github.event_name != 'schedule' || steps.publication.outputs.changed == 'true'
       - uses: actions/upload-pages-artifact@v3
+        if: github.event_name != 'schedule' || steps.publication.outputs.changed == 'true'
         with:
           path: dist
+    outputs:
+      changed: ${{ steps.publication.outputs.changed }}
   deploy:
-    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request' && (github.event_name != 'schedule' || needs.build.outputs.changed == 'true')
     needs: build
     permissions:
       pages: write

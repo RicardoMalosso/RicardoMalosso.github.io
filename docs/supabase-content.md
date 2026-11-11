@@ -1,3 +1,5 @@
+> Admin/API update: see [admin-api.md](admin-api.md). Once enabled, release builds use immutable `content_releases`; normalized tables below are preserved migration archives.
+
 # Supabase content
 
 Project: portfolio, São Paulo (`gsuagfvgtoyuwfljsusw`).

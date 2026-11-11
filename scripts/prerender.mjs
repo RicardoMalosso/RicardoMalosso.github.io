@@ -35,3 +35,13 @@ fs.writeFileSync('dist/.nojekyll', '');
 fs.writeFileSync('dist/sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${routes.map(route => `<url><loc>${absolute(route)}</loc></url>`).join('')}</urlset>`);
 fs.writeFileSync('dist/robots.txt', `User-agent: *\nAllow: /\nSitemap: ${absolute('/sitemap.xml')}\n`);
 console.log(`Prerendered ${routes.length} pages + 404, sitemap, and robots.txt.`);
+
+// Public login shell only; protected data is fetched after server authorization.
+fs.mkdirSync('dist/admin', {recursive:true});
+fs.writeFileSync('dist/admin/index.html', template.replace('__LANG__','en').replace('__TITLE__','content studio · ricardo malosso').replace('__DESCRIPTION__','Private content management').replace('__SEO__','<meta name="robots" content="noindex,nofollow"/>').replace('<!--app-html-->',''));
+
+if(fs.existsSync('.content-release/publication.json')) {
+ fs.rmSync('dist/lyrics',{recursive:true,force:true});
+ fs.cpSync('.content-release/lyrics','dist/lyrics',{recursive:true});
+ fs.copyFileSync('.content-release/publication.json','dist/publication.json');
+}

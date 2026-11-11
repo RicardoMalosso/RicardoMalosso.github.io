@@ -3,3 +3,9 @@ dist/
 .ssr/
 src/content.generated.json
 .openai/
+
+supabase/.temp/
+.env*
+!.env.example
+public/publication.json
+.content-release/

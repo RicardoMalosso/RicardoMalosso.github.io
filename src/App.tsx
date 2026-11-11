@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState } from 'react';
+import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
+const AdminPanel = lazy(() => import('./components/AdminPanel'));
 import { Link, NavLink, Route, Routes, useLocation, useParams } from 'react-router';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import ReactMarkdown from 'react-markdown';
@@ -131,4 +132,4 @@ function LanguageGate() {
   useEffect(() => { let locale = navigator.language.toLowerCase().startsWith('pt') ? 'pt-br' : 'en'; try { const saved = localStorage.getItem('pacblog-locale'); if (saved === 'pt-br' || saved === 'en') locale = saved; } catch {} window.location.replace(publicPath(`/${locale}/`)); }, []);
   return <main className="language-gate"><span className="brand-mark">rm.</span><h1>ricardo malosso</h1><p lang="pt-BR">software, música, cultura</p><p lang="en">software, music, culture</p><div><a className="button" href={publicPath('/pt-br/')} lang="pt-BR">🇧🇷 português brasileiro ↗</a><a className="button" href={publicPath('/en/')} lang="en">🇨🇦 english ↗</a></div></main>;
 }
-export default function App() { return <Routes><Route path="/" element={<LanguageGate/>}/><Route path="/:locale/*" element={<LocaleRoot/>}/></Routes>; }
+export default function App() { return <Routes><Route path="/admin/*" element={<Suspense fallback={<main className="wrap">Loading admin…</main>}><AdminPanel/></Suspense>}/><Route path="/" element={<LanguageGate/>}/><Route path="/:locale/*" element={<LocaleRoot/>}/></Routes>; }

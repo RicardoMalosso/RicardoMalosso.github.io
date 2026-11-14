@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import { PGlite } from '@electric-sql/pglite';
 import { createRuntimeContentStore, normalizeDocument } from '../src/runtimeContent.ts';
+import { serializeSnapshot } from '../scripts/html-snapshot.mjs';
 
 const oldId = '11111111-1111-4111-8111-111111111111';
 const newId = '22222222-2222-4222-8222-222222222222';
@@ -14,6 +15,12 @@ const summaries = doc.entries.map(e => ({...e,body:'',player:undefined}));
 const response = value => new Response(JSON.stringify(value), {headers:{'content-type':'application/json'}});
 const options = {enabled:true,url:'https://example.supabase.co',key:'publishable',publication};
 const deferred = () => {let resolve; const promise = new Promise(r => {resolve=r;}); return {promise,resolve};};
+
+test('embedded lyric snapshots cannot terminate their JSON script element or change user text',()=>{
+  const assets={'lyrics/example/en.lrc':'[00:01] </script><script>alert("x")</script> $& < & \u2028'};
+  const serialized=serializeSnapshot(assets);
+  assert(!serialized.includes('<'));assert.deepEqual(JSON.parse(serialized),assets);
+});
 
 test('public RPCs read only published releases, omit bodies/assets from manifests and pin document reads', async () => {
   const db = new PGlite();

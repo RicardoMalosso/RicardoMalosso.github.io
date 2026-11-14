@@ -27,8 +27,8 @@ before(async()=>{
   browser=await chromium.launch({headless:true,executablePath:process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH});
 });
 after(async()=>{await browser?.close();await new Promise(resolve=>server?.close(resolve));});
-async function setup({offline=false,manifest={...latest,entries:summaries},document=doc,denyStorage=false,mobile=false}={}){
-  const context=await browser.newContext({viewport:mobile?{width:390,height:844}:{width:1280,height:900}});
+async function setup({offline=false,manifest={...latest,entries:summaries},document=doc,denyStorage=false,mobile=false,noJs=false}={}){
+  const context=await browser.newContext({javaScriptEnabled:!noJs,viewport:mobile?{width:390,height:844}:{width:1280,height:900}});
   context.setDefaultTimeout(10000);
   if(denyStorage)await context.addInitScript(()=>{Storage.prototype.getItem=()=>{throw Error('denied');};Storage.prototype.setItem=()=>{throw Error('denied');};});
   // Playback is unrelated to content loading; keep tests deterministic without contacting YouTube.
@@ -83,11 +83,24 @@ test('listing discovers new publication, body search works and mobile layout doe
 test('paused database preserves static pages without hydration errors or content flashes',async()=>{
   const entry=entries.find(e=>e.section==='music'&&e.locale==='en');
   const {context,page,requests,errors}=await setup({offline:true});
+  const lyricRequests=[];page.on('request',req=>{if(req.url().endsWith('.lrc'))lyricRequests.push(req.url());});
   try{
     const response=await page.goto(`${origin}/en/music/${entry.slug}/`);assert.equal(response.status(),200);
     await page.getByRole('heading',{name:entry.title,exact:true}).waitFor();
     await until(()=>requests.length>0);assert.deepEqual(errors,[]);
     assert.equal(await page.title(),`${entry.title} · ricardo malosso`);
+    await page.locator('.sync-en').first().waitFor();assert.equal(lyricRequests.length,0);
+  }finally{await context.close();}
+});
+
+test('deployed song and both lyric columns remain readable without JavaScript',async()=>{
+  const entry=entries.find(e=>e.section==='music'&&e.locale==='en');
+  const {context,page,requests}=await setup({noJs:true});
+  try{
+    await page.goto(`${origin}/en/music/${entry.slug}/`);
+    await page.getByRole('heading',{name:entry.title,exact:true}).waitFor();
+    assert((await page.locator('.sync-en').first().innerText()).length>0);
+    assert((await page.locator('.sync-pt').first().innerText()).length>0);assert.equal(requests.length,0);
   }finally{await context.close();}
 });
 

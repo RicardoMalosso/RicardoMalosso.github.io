@@ -12,6 +12,13 @@ hydrates that exact snapshot before contacting the database. With
 at mount, navigation, focus or reconnection, at most once per minute. There is no
 timer, Realtime subscription or complete-release download in the browser.
 
+Music pages also render both lyric columns into the initial HTML. Their two lyric
+assets are embedded as escaped inert JSON and reused for hydration. This makes the
+lyrics available to no-JavaScript readers and crawlers and removes two initial LRC
+requests. Only the current page's lyrics are embedded; other pages are loaded when
+visited. Runtime publications still replace an article and both lyric assets as one
+versioned document.
+
 The server returns only the version when unchanged. For a newer version it returns
 route/listing metadata, excluding article bodies, players, notes and lyrics. An
 article fetch then requests one immutable document, pinned to that version. Both

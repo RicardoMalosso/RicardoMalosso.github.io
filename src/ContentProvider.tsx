@@ -14,9 +14,10 @@ const makeStore = () => {
     publication: publication as Publication | null, storage,
   });
 };
-const ContentContext = createContext<ReturnType<typeof makeStore> | null>(null);
-export function ContentProvider({ children }: { children: React.ReactNode }) {
+const ContentContext = createContext<{store: ReturnType<typeof makeStore>; snapshotAssets: Record<string, string>} | null>(null);
+export function ContentProvider({ children, initialAssets = {} }: { children: React.ReactNode; initialAssets?: Record<string, string> }) {
   const [store] = useState(makeStore);
+  const [snapshotAssets] = useState(initialAssets);
   const location = useLocation();
   useEffect(() => { if (!location.pathname.startsWith('/admin')) void store.refresh(); }, [store, location.pathname]);
   useEffect(() => {
@@ -25,11 +26,12 @@ export function ContentProvider({ children }: { children: React.ReactNode }) {
     window.addEventListener('focus', refresh); window.addEventListener('online', refresh);
     return () => { window.removeEventListener('focus', refresh); window.removeEventListener('online', refresh); };
   }, [store, location.pathname]);
-  return <ContentContext.Provider value={store}>{children}</ContentContext.Provider>;
+  return <ContentContext.Provider value={{store,snapshotAssets}}>{children}</ContentContext.Provider>;
 }
 export function useContent() {
-  const store = useContext(ContentContext);
-  if (!store) throw Error('ContentProvider required');
+  const context = useContext(ContentContext);
+  if (!context) throw Error('ContentProvider required');
+  const {store,snapshotAssets} = context;
   const state = useSyncExternalStore(store.subscribe, store.getSnapshot, store.getServerSnapshot);
-  return { ...state, store };
+  return { ...state, store, snapshotAssets };
 }

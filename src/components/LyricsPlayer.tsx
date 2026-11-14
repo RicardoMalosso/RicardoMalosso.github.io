@@ -105,7 +105,7 @@ export default function LyricsPlayer({ config, onDuration, lyricNotes = [], orig
       } catch { state.resume = false; }
     }
   };
-  const [rows, setRows] = useState<LyricRow[]>([]); const [loadError, setLoadError] = useState('');
+  const [rows, setRows] = useState<LyricRow[]>(() => config.subtitleText ? alignLyrics(parseLrc(config.subtitleText['pt-br']), parseLrc(config.subtitleText.en)) : []); const [loadError, setLoadError] = useState('');
   const [playerError, setPlayerError] = useState(false); const [ready, setReady] = useState(false);
   const [time, setTime] = useState(0); const [duration, setDuration] = useState(0); const [playing, setPlaying] = useState(false);
   const [volume, setVolume] = useState(100); const [muted, setMuted] = useState(false);

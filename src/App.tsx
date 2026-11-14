@@ -79,12 +79,12 @@ function Listing({ locale, section }: { locale: Locale; section: 'blog' | 'music
 }
 function Article({ locale, section }: { locale: Locale; section: 'blog' | 'music' }) {
   const { slug = '' } = useParams(); const { t } = useTranslation();
-  const { store, publication, phase, documents, failed, entries } = useContent();
+  const { store, publication, phase, documents, failed, entries, snapshotAssets } = useContent();
   const documentKey = `${section}/${slug}`;
   useEffect(() => { void store.loadDocument(section, slug); }, [store, section, slug, publication?.id, phase]);
   const entry = store.article(locale, section, slug);
-  const assets = documents[documentKey]?.assets;
-  const subtitleText = entry?.player && assets ? {en: assets[entry.player.subtitles.en], 'pt-br': assets[entry.player.subtitles['pt-br']]} : undefined;
+  const assets = documents[documentKey]?.assets ?? snapshotAssets;
+  const subtitleText = entry?.player && typeof assets[entry.player.subtitles.en] === 'string' && typeof assets[entry.player.subtitles['pt-br']] === 'string' ? {en: assets[entry.player.subtitles.en], 'pt-br': assets[entry.player.subtitles['pt-br']]} : undefined;
   if (!entry) {
     const exists = entries.some(e => e.locale === locale && e.section === section && e.slug === slug);
     const unavailable = failed.includes(documentKey) || phase === 'offline';
@@ -161,4 +161,4 @@ function LanguageGate() {
   useEffect(() => { let locale = navigator.language.toLowerCase().startsWith('pt') ? 'pt-br' : 'en'; try { const saved = localStorage.getItem('pacblog-locale'); if (saved === 'pt-br' || saved === 'en') locale = saved; } catch {} window.location.replace(publicPath(`/${locale}/`)); }, []);
   return <main className="language-gate"><span className="brand-mark">rm.</span><h1>ricardo malosso</h1><p lang="pt-BR">software, música, cultura</p><p lang="en">software, music, culture</p><div><a className="button" href={publicPath('/pt-br/')} lang="pt-BR">🇧🇷 português brasileiro ↗</a><a className="button" href={publicPath('/en/')} lang="en">🇨🇦 english ↗</a></div></main>;
 }
-export default function App() { return <ContentProvider><Routes><Route path="/admin/*" element={<Suspense fallback={<main className="wrap">Loading admin…</main>}><AdminPanel/></Suspense>}/><Route path="/" element={<LanguageGate/>}/><Route path="/:locale/*" element={<LocaleRoot/>}/></Routes></ContentProvider>; }
+export default function App({ initialAssets = {} }: { initialAssets?: Record<string, string> }) { return <ContentProvider initialAssets={initialAssets}><Routes><Route path="/admin/*" element={<Suspense fallback={<main className="wrap">Loading admin…</main>}><AdminPanel/></Suspense>}/><Route path="/" element={<LanguageGate/>}/><Route path="/:locale/*" element={<LocaleRoot/>}/></Routes></ContentProvider>; }

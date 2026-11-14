@@ -2,6 +2,7 @@ node_modules/
 dist/
 .ssr/
 src/content.generated.json
+src/publication.generated.json
 .openai/
 
 supabase/.temp/

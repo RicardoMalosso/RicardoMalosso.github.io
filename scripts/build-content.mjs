@@ -7,4 +7,6 @@ if(!['files','supabase','release'].includes(source))throw Error('Unsupported CON
 if(source!=='release')fs.rmSync('.content-release',{recursive:true,force:true});
 const entries=source==='release'?await loadRelease():source==='supabase'?await loadSupabaseContent():loadContent();
 fs.writeFileSync('src/content.generated.json',JSON.stringify(entries,null,2)+'\n');
+const publication=source==='release'?JSON.parse(fs.readFileSync('.content-release/publication.json','utf8')):null;
+fs.writeFileSync('src/publication.generated.json',JSON.stringify(publication)+'\n');
 console.log(`Validated ${entries.length} content entries from ${source}.`);

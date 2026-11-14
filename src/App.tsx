@@ -36,7 +36,9 @@ function Layout({ locale }: { locale: Locale }) {
     document.documentElement.lang = locale === 'en' ? 'en' : 'pt-BR'; document.title = meta.title;
     document.querySelector('meta[name="description"]')?.setAttribute('content', meta.description);
     for (const key of ['og:title', 'og:description', 'og:url']) document.querySelector(`meta[property="${key}"]`)?.setAttribute('content', key === 'og:title' ? meta.title : key === 'og:description' ? meta.description : siteUrl + publicPath(location.pathname));
-    document.querySelector('link[rel="canonical"]')?.setAttribute('href', siteUrl + publicPath(location.pathname));
+    let canonical = document.querySelector<HTMLLinkElement>('link[rel="canonical"]');
+    if (!canonical) { canonical = document.createElement('link'); canonical.rel = 'canonical'; document.head.appendChild(canonical); }
+    canonical.href = siteUrl + publicPath(location.pathname);
     document.querySelectorAll<HTMLLinkElement>('link[rel="alternate"][hreflang]').forEach(el => { const lang = el.hreflang === 'en' ? 'en' : 'pt-br'; el.href = siteUrl + publicPath(alternatePath(location.pathname, lang, content).split('?')[0]); });
     try { localStorage.setItem('pacblog-locale', locale); } catch {}
   }, [locale, location.pathname, content]);

@@ -29,6 +29,7 @@ before(async()=>{
 after(async()=>{await browser?.close();await new Promise(resolve=>server?.close(resolve));});
 async function setup({offline=false,manifest={...latest,entries:summaries},document=doc,denyStorage=false,mobile=false}={}){
   const context=await browser.newContext({viewport:mobile?{width:390,height:844}:{width:1280,height:900}});
+  context.setDefaultTimeout(10000);
   if(denyStorage)await context.addInitScript(()=>{Storage.prototype.getItem=()=>{throw Error('denied');};Storage.prototype.setItem=()=>{throw Error('denied');};});
   // Playback is unrelated to content loading; keep tests deterministic without contacting YouTube.
   await context.route('**/www.youtube.com/iframe_api',route=>route.fulfill({contentType:'application/javascript',body:'window.YT={Player:function(){this.destroy=function(){}}};window.onYouTubeIframeAPIReady?.();'}));
@@ -40,6 +41,7 @@ async function setup({offline=false,manifest={...latest,entries:summaries},docum
     return route.fulfill({contentType:'application/json',body:JSON.stringify(data)});
   });
   const page=await context.newPage();const errors=[];page.on('pageerror',error=>errors.push(error.message));
+  page.on('console',message=>{if(message.type()==='error'&&/hydration|hydrating|Minified React error|didn't match/i.test(message.text()))errors.push(message.text());});
   return {context,page,requests,errors};
 }
 async function until(check){for(let n=0;n<100;n++){if(await check())return;await new Promise(r=>setTimeout(r,50));}assert.fail('Condition did not become true');}
@@ -94,14 +96,38 @@ test('blocked browser storage does not prevent loading a new post',async()=>{
   try{await page.goto(origin+'/en/music/runtime-song/');await page.getByRole('heading',{name:'Runtime song',exact:true}).waitFor();await page.locator('.sync-en').first().waitFor();assert.deepEqual(errors,[]);}finally{await context.close();}
 });
 
+test('reload reuses the cached immutable document after checking the manifest',async()=>{
+  const {context,page,requests,errors}=await setup();
+  try{
+    await page.goto(origin+'/en/music/runtime-song/');await page.locator('.sync-en').first().waitFor();
+    await page.reload();await page.locator('.sync-en').first().waitFor();
+    assert.equal(requests.filter(r=>r.name==='content_manifest').length,2);
+    assert.equal(requests.filter(r=>r.name==='content_document').length,1);
+    assert.deepEqual(errors,[]);
+  }finally{await context.close();}
+});
+
+test('an edited static song receives new text, metadata and lyrics together',async()=>{
+  const original=entries.find(e=>e.section==='music'&&e.locale==='en');
+  const edited=structuredClone(doc);edited.slug=original.slug;
+  for(const e of edited.entries){e.slug=original.slug;e.title='Updated song';}
+  const manifest={...latest,entries:[...entries.filter(e=>e.section!=='music'||e.slug!==original.slug),...edited.entries].map(e=>({...e,body:''}))};
+  const {context,page,errors}=await setup({manifest,document:edited});
+  try{
+    const response=await page.goto(`${origin}/en/music/${original.slug}/`);assert.equal(response.status(),200);
+    await page.getByRole('heading',{name:'Updated song',exact:true}).waitFor();
+    await page.getByText('Loving and changing things',{exact:false}).first().waitFor();
+    assert.equal(await page.title(),'Updated song · ricardo malosso');assert.deepEqual(errors,[]);
+  }finally{await context.close();}
+});
+
 test('confirmed archive replaces a stale static article with not-found content',async()=>{
   const entry=entries.find(e=>e.section==='music'&&e.locale==='en');
   const {context,page}=await setup({manifest:{...latest,entries:[]}});
   try{await page.goto(`${origin}/en/music/${entry.slug}/`);await until(async()=>await page.locator('h1').innerText()!==entry.title);assert.equal(await page.locator('.article').count(),0);}finally{await context.close();}
 });
 
-test('unchanged snapshot avoids document downloads',async()=>{
-  if(!built)return;
+test('unchanged snapshot avoids document downloads',{skip:!built},async()=>{
   const entry=entries.find(e=>e.section==='music'&&e.locale==='en');
   const {context,page,requests,errors}=await setup({manifest:{...built,unchanged:true}});
   try{await page.goto(`${origin}/en/music/${entry.slug}/`);await until(()=>requests.length>0);assert.equal(requests.length,1);assert.equal(requests[0].payload.known_id,built.id);assert.deepEqual(errors,[]);}finally{await context.close();}

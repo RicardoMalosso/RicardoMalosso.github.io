@@ -109,6 +109,14 @@ authorization and SQL are exercised separately with PGlite by `npm test`.
 The dedicated **Test runtime content** PR workflow runs browser and unit/database
 tests with offline repository fixtures and has no deployment or database credentials.
 
+`node scripts/verify-runtime-release.mjs` additionally fetches the current public
+release read-only and runs every document through the proposed SQL and runtime
+validator in an isolated database. It reports payload sizes without changing hosted
+tables. The first check covered 24 documents, 46 translations and 46 lyric assets:
+194,144 bytes for the whole release, 15,967 bytes for the listing manifest, 110 bytes
+for an unchanged-version response, and at most 26,226 bytes for one document. These
+are JSON payload sizes, not measured end-to-end latency or compressed transfer sizes.
+
 ## Activation after review
 
 1. Pass file-source and current-release builds, SQL isolation tests and browser CI.

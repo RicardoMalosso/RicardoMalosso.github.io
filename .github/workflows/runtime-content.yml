@@ -1,0 +1,33 @@
+name: Test runtime content
+on:
+  pull_request:
+    paths:
+      - 'src/**'
+      - 'scripts/**'
+      - 'supabase/**'
+      - 'tests/**'
+      - 'package*.json'
+      - '.github/workflows/runtime-content.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  runtime:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        source: [files, release]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:runtime-browser
+        env:
+          CONTENT_SOURCE: ${{ matrix.source }}
+      - run: npm test

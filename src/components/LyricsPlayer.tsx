@@ -20,7 +20,7 @@ function youtubeApi(): Promise<YTNamespace> {
   }).catch(error => { apiPromise = undefined; throw error; });
   return apiPromise!;
 }
-export type MusicPlayerConfig = { youtubeId: string; subtitles?: { en: string; 'pt-br': string }; lrc?: string; lyricLabel?: string; offsetMs?: number };
+export type MusicPlayerConfig = { youtubeId: string; subtitles?: { en: string; 'pt-br': string }; subtitleText?: { en: string; 'pt-br': string }; lrc?: string; lyricLabel?: string; offsetMs?: number };
 export default function LyricsPlayer({ config, onDuration, lyricNotes = [], originalLanguage = 'pt-BR' }: { lyricNotes?: LyricNote[]; originalLanguage?: string; config: MusicPlayerConfig; onDuration?: (duration: number) => void }) {
   const annotated = (text: string, start: number, language: 'en' | 'pt-br') => {
     const notes = lyricNotes.filter(n => n.language === language && Math.abs(n.time.split(':').reduce((a, v) => a * 60 + Number(v), 0) - start) < 0.005);
@@ -105,7 +105,7 @@ export default function LyricsPlayer({ config, onDuration, lyricNotes = [], orig
       } catch { state.resume = false; }
     }
   };
-  const [rows, setRows] = useState<LyricRow[]>([]); const [loadError, setLoadError] = useState('');
+  const [rows, setRows] = useState<LyricRow[]>(() => config.subtitleText ? alignLyrics(parseLrc(config.subtitleText['pt-br']), parseLrc(config.subtitleText.en)) : []); const [loadError, setLoadError] = useState('');
   const [playerError, setPlayerError] = useState(false); const [ready, setReady] = useState(false);
   const [time, setTime] = useState(0); const [duration, setDuration] = useState(0); const [playing, setPlaying] = useState(false);
   const [volume, setVolume] = useState(100); const [muted, setMuted] = useState(false);
@@ -120,6 +120,12 @@ export default function LyricsPlayer({ config, onDuration, lyricNotes = [], orig
   useEffect(() => {
     const controller = new AbortController(); setRows([]); setLoadError('');
     if (config.lrc !== undefined) { setRows(parseLrc(config.lrc).map(cue => ({ start: cue.start, end: cue.end, pt: cue }))); return () => controller.abort(); }
+    if (config.subtitleText) {
+      const pt = parseLrc(config.subtitleText['pt-br']); const en = parseLrc(config.subtitleText.en);
+      setRows(alignLyrics(pt, en));
+      if (!pt.length || !en.length) setLoadError('lyricsLoadError');
+      return () => controller.abort();
+    }
     if (!config.subtitles) return () => controller.abort();
     const subtitles = config.subtitles;
     const read = async (path: string): Promise<Cue[]> => {
@@ -137,7 +143,7 @@ export default function LyricsPlayer({ config, onDuration, lyricNotes = [], orig
       if (results.some(r => r.status === 'rejected') || !pt.length || !en.length) setLoadError('lyricsLoadError');
     });
     return () => controller.abort();
-  }, [config.subtitles?.en, config.subtitles?.['pt-br'], config.lrc]);
+  }, [config.subtitles?.en, config.subtitles?.['pt-br'], config.subtitleText?.en, config.subtitleText?.['pt-br'], config.lrc]);
 
   useEffect(() => {
     let cancelled = false; let instance: Player | null = null; setPlayerError(false); setReady(false);

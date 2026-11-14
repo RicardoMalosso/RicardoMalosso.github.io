@@ -16,7 +16,7 @@ function checkEntries(entries: Entry[]) {
   for (const e of entries) {
     if (!e || !['en', 'pt-br'].includes(e.locale) || !['blog', 'music'].includes(e.section) || !routePart.test(e.slug) ||
       typeof e.title !== 'string' || typeof e.description !== 'string' || typeof e.body !== 'string' ||
-      !/^\d{4}-\d{2}-\d{2}$/.test(e.date) || (e.tags && (!Array.isArray(e.tags) || e.tags.some(t => typeof t !== 'string'))) || keys.has(entryKey(e))) throw Error('Invalid published entry');
+      !/^\d{4}-\d{2}-\d{2}$/.test(e.date) || !Number.isFinite(Date.parse(e.date)) || (e.tags && (!Array.isArray(e.tags) || e.tags.some(t => typeof t !== 'string'))) || keys.has(entryKey(e))) throw Error('Invalid published entry');
     keys.add(entryKey(e));
   }
 }

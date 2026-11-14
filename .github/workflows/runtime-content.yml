@@ -15,6 +15,10 @@ jobs:
   runtime:
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        source: [files, release]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -25,5 +29,5 @@ jobs:
       - run: npx playwright install --with-deps chromium
       - run: npm run test:runtime-browser
         env:
-          CONTENT_SOURCE: files
+          CONTENT_SOURCE: ${{ matrix.source }}
       - run: npm test

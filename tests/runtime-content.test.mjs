@@ -127,3 +127,21 @@ test('invalid documents and missing translation assets are rejected as a whole',
   const bad=structuredClone(doc);bad.entries[0].player.youtubeUrl='https://youtube.com.evil.test/watch?v=ixnCyOzNWx0';
   assert.throws(()=>normalizeDocument(bad,'music','example'),/YouTube|video/);
 });
+
+test('damaged cached documents are refetched and an explicit retry recovers a transient document failure',async()=>{
+  let calls=0;
+  const store=createRuntimeContentStore([],{...options,storage:{getItem:()=>JSON.stringify({id:newId,documents:{'music/example':{...doc,assets:{}}}}),setItem:()=>{}},fetch:async url=>{
+    if(url.endsWith('content_manifest'))return response({...latest,entries:summaries});
+    if(calls++===0)return new Response('',{status:503});
+    return response(doc);
+  }});
+  await store.refresh();await store.loadDocument('music','example');
+  assert.deepEqual(store.getSnapshot().failed,['music/example']);assert.equal(store.article('en','music','example'),undefined);
+  await store.loadDocument('music','example');
+  assert.equal(calls,2);assert.deepEqual(store.getSnapshot().failed,[]);assert.equal(store.article('en','music','example').title,'Example');
+});
+
+test('malformed listing dates do not replace a valid static snapshot',async()=>{
+  const store=createRuntimeContentStore([entry],{...options,fetch:async()=>response({...latest,entries:[{...entry,date:'2026-99-99'}]})});
+  await store.refresh();assert.equal(store.getSnapshot().phase,'offline');assert.equal(store.article('en','music','example').date,entry.date);
+});

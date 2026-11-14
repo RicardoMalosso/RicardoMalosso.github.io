@@ -114,7 +114,11 @@ intercepts the public RPC requests with deterministic published fixtures. Databa
 authorization and SQL are exercised separately with PGlite by `npm test`.
 `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH` can select a preinstalled Chromium executable.
 The dedicated **Test runtime content** PR workflow runs browser and unit/database
-tests with offline repository fixtures and has no deployment or database credentials.
+tests with both offline repository fixtures and the current public release. The
+release variant uses only the public publishable key already in the repository;
+neither variant has deployment or privileged database credentials. The
+unchanged-build browser case runs in the release variant; files mode has no release
+ID and explicitly skips that one case.
 
 `node scripts/verify-runtime-release.mjs` additionally fetches the current public
 release read-only and runs every document through the proposed SQL and runtime

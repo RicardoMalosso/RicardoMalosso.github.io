@@ -49,32 +49,9 @@ Run `npm run build` and `npm test` after code changes. Test a cloud publication 
 The build pins a single release so related post/lyric records cannot drift mid-build.
 Tests must use generated entries for live routes and portable temporary directories.
 
-Publishing is complete only after the requested release is deployed and verified.
-Creating a database snapshot or returning a queued job is not completion. When the
-user asks to publish content, carry the deployment through before ending the task.
-
-1. Validate and publish the document, retaining the immutable release ID.
-2. Trigger **Build and deploy GitHub Pages** on main. Use workflow dispatch when
-   available. If the connector lacks dispatch and the CLI is unauthenticated,
-   use the connected GitHub tools to rerun the latest eligible workflow's build
-   job; its publication-selection step fetches the current release and its
-   dependent deploy job runs afterward. Check the workflow revision first.
-   Do not rerun only the deploy job: that can redeploy an old artifact.
-3. Follow build, tests and deployment to completion. Investigate failures rather
-   than leaving the publication queued.
-4. Fetch live `publication.json` with a cache-busting query and verify that its ID
-   matches the requested release. Check both localized pages and music listings
-   for new music. If a newer release superseded it, verify that release still
-   contains the requested content.
-5. Return the live page links. If blocked, state the specific blocker and what
-   actually completed; never call a queued publication deployed.
-
-The scheduled workflow is a fallback only. Its five-minute cron expression is
-not a delivery guarantee: observed GitHub delays were several hours. The admin
-API can dispatch immediately only when `PORTFOLIO_GITHUB_TOKEN` is configured;
-without it, publishing through the panel remains scheduled. Direct SQL publication
-does not call the Edge Function's dispatch helper and always needs an explicit
-deployment trigger. Do not promise automatic immediate deployment without testing
-that path.
-
-Frontend PR builds never deploy. Keep prior content snapshots and source archives.
+Publish or archive through the owner API. Verify the latest public content_manifest and
+content_document RPCs, including localized entries and lyric assets. The live browser
+refreshes from those RPCs. A Pages build is unnecessary for a content correction.
+New URLs gain static HTTP 200 responses, social metadata and sitemap entries at the
+next hourly snapshot refresh. Run the Pages workflow explicitly if these are needed
+immediately. Frontend releases still require a Pages deployment.

@@ -51,12 +51,12 @@ token management requires a Google session, so a personal token cannot mint othe
 | GET / POST | `/posts` | List / create a draft |
 | GET / PATCH | `/posts/{id}` | Read / save complete draft document |
 | POST | `/posts/{id}/validate` | Validate saved content |
-| POST | `/posts/{id}/publish` | Freeze published content and queue deployment |
+| POST | `/posts/{id}/publish` | Commit a published release |
 | POST | `/posts/{id}/archive` | Exclude post from the next snapshot |
 | GET | `/posts/{id}/history` | Read revisions |
 | POST | `/posts/{id}/restore` | Restore historical content into a new draft |
-| GET | `/publications/{id}` | Compare job to live deployment marker |
-| POST | `/publications/{id}/retry` | Retry dispatch, or report scheduled mode |
+| GET | `/publications/{id}` | Check whether the release is current or superseded |
+| POST | `/publications/{id}/retry` | Explicitly request a static refresh, or report scheduled mode |
 | GET / POST | `/tokens` | List / create tokens (interactive login only) |
 | DELETE | `/tokens/{id}` | Revoke a token immediately |
 
@@ -121,18 +121,12 @@ public historical content; archiving removes a post from future deployments and
 is not a confidential-data erasure operation. The original 82 source files and old
 normalized content tables remain available as migration archives.
 
-GitHub Actions checks the latest release on a five-minute schedule and skips the
-build when its ID already matches the deployed marker. It pins the chosen ID for
-the whole build. Failed builds leave the previous deployment online. GitHub may
-delay scheduled runs or disable them after repository inactivity. Recovery: run
-**Build and deploy GitHub Pages** manually in Actions. Optional `publication_id`
-selects a specific published snapshot; leave blank to choose latest.
-
-No separate GitHub secret is required. Optionally configure an Actions-write,
-repository-scoped token as the Edge Function secret `PORTFOLIO_GITHUB_TOKEN` for
-immediate workflow dispatch. Otherwise the API returns queued/scheduled. Publication
-status uses the live `publication.json`; a newer deployed release marks older jobs
-superseded, never falsely live. GitHub Actions is linked for detailed failure logs.
+Publish and archive return HTTP 200 once the database commits. Readers check the
+release manifest on page load and navigation. GitHub Actions checks the release ID
+hourly and batches static HTML, link previews and sitemap updates. To refresh HTML
+immediately, run **Build and deploy GitHub Pages** on main. Existing API clients may
+also request an explicit static refresh with the retry endpoint when the optional
+GitHub dispatch token is configured.
 
 ## Deploying / maintaining the backend
 

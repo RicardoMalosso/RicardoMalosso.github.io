@@ -7,6 +7,15 @@ import { routes, base, alternatePath } from '../.ssr/entry-server.js';
 import os from 'node:os';
 const builtEntries = JSON.parse(fs.readFileSync('src/content.generated.json','utf8'));
 const outputFor = route => path.join('dist', route, 'index.html');
+test('music lyrics are already in the initial HTML and embedded assets match their published files',()=>{
+  for(const e of builtEntries.filter(e=>e.player)){
+    const html=fs.readFileSync(outputFor(`/${e.locale}/${e.section}/${e.slug}/`),'utf8');
+    const json=html.match(/<script id="content-lyrics-snapshot" type="application\/json">(.*?)<\/script>/s)?.[1];
+    assert(json, e.slug);const assets=JSON.parse(json);
+    for(const file of Object.values(e.player.subtitles))assert.equal(assets[file],fs.readFileSync(path.join('dist',file),'utf8'));
+    assert(html.includes('class="sync-en"'),e.slug);assert(html.includes('class="sync-pt'),e.slug);
+  }
+});
 test('all declared routes contain prerendered HTML and locale metadata', () => {
   for (const route of routes) {
     const html = fs.readFileSync(outputFor(route), 'utf8');

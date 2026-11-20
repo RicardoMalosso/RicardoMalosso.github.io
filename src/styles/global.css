@@ -1403,26 +1403,24 @@ main:focus {
     background: var(--panel)
 }
 
-.music-player-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    gap: 20px;
-    margin-bottom: 24px
-}
-
-.music-player-header h2 {
-    font-size: 28px;
-    margin-top: 7px
-}
-
-.player-actions {
+.player-footer {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px
+    align-items: flex-start;
+    gap: 8px 16px;
+    margin-top: 18px
 }
 
-.player-actions button,
+.player-footer > .player-caption {
+    flex: 1 1 16rem;
+    margin-top: 0
+}
+
+.lyrics-view-toggle {
+    margin-inline-start: auto
+}
+
+.lyrics-view-toggle,
 .lyric-controls button {
     border: 1px solid var(--line);
     background: transparent;
@@ -1432,7 +1430,7 @@ main:focus {
     font-size: 12px
 }
 
-.player-actions button:hover,
+.lyrics-view-toggle:hover,
 .lyric-controls button:hover {
     border-color: var(--accent)
 }
@@ -1659,11 +1657,6 @@ main:focus {
 @media(max-width:700px) {
     .music-player {
         padding: 18px
-    }
-
-    .music-player-header {
-        align-items: flex-start;
-        flex-direction: column
     }
 
     .player-layout.video-compact {

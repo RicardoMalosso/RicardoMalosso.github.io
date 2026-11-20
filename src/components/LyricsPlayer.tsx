@@ -249,7 +249,6 @@ export default function LyricsPlayer({ config, onDuration, lyricNotes = [], orig
   const changeVolume = (value: number) => { const p = player.current; if (!p || !ready) return; volumeLockUntil.current = Date.now() + 1000; p.setVolume(value); if (value > 0 && p.isMuted()) p.unMute(); setVolume(value); setMuted(value === 0); };
   const toggleMute = () => { const p = player.current; if (!p || !ready) return; volumeLockUntil.current = Date.now() + 1000; if (p.isMuted() || p.getVolume() === 0) { if (p.getVolume() === 0) { p.setVolume(50); setVolume(50); } p.unMute(); setMuted(false); } else { p.mute(); setMuted(true); } };
   return <section className="music-player" aria-label={t('lyricsPlayer')}>
-    <div className="music-player-header"><div><p className="eyebrow">{t('listenRead')}</p><h2>{t('lyricsPlayer')}</h2></div><div className="player-actions"><button onClick={() => {setExpanded(x => !x); setFollowing(true);}} aria-expanded={expanded}>{t(expanded ? 'compactLyrics' : 'expandLyrics')}</button></div></div>
     <div className="player-layout">
       <div ref={videoShell} className="youtube-shell"><div ref={mount} className="youtube-mount"/>
         <button ref={fullscreenButton} className="lyrics-fullscreen-button" type="button" onClick={toggleFullscreen} aria-label={fullscreenLabel} aria-pressed={fullscreen}>{fullscreen ? '⤡' : '⤢'} {fullscreenLabel}</button>
@@ -287,7 +286,14 @@ export default function LyricsPlayer({ config, onDuration, lyricNotes = [], orig
       <output className="mono" aria-label={t('syncOffset')} aria-live="polite">{offsetMs > 0 ? '+' : ''}{offsetMs} ms</output>
       {offsetMs !== defaultOffsetMs && <button type="button" onClick={() => setOffsetMs(defaultOffsetMs)}>{t('syncReset')}</button>}
     </div>
-    <p className="player-caption">{t('keyboardHelp')} <button className="inline-button" onClick={() => setScriptMessage(x => !x)} aria-expanded={scriptMessage}>{t('keyboardDetails')}</button></p>
-    {scriptMessage && <p className="player-caption">{t('keyboardExplanation')}</p>}
+    <div className="player-footer">
+      <div className="player-caption">
+        <p>{t('keyboardHelp')} <button type="button" className="inline-button" onClick={() => setScriptMessage(x => !x)} aria-expanded={scriptMessage}>{t('keyboardDetails')}</button></p>
+        {scriptMessage && <p className="player-caption">{t('keyboardExplanation')}</p>}
+      </div>
+      <button type="button" className="lyrics-view-toggle" onClick={() => { setExpanded(x => !x); setFollowing(true); }} aria-expanded={expanded}>
+        {t(expanded ? 'compactLyrics' : 'expandLyrics')}
+      </button>
+    </div>
   </section>;
 }

@@ -7,9 +7,20 @@ Use this recipe for “create a new post for this YouTube video”. Read this gu
 - **YouTube link only:** identify artist, song title, and duration; fetch synchronized lyrics from LRCLIB; translate to the other language; create the page.
 - **Link + one LRC:** preserve it and translate its text, keeping timestamps identical.
 - **Link + both LRCs:** use them directly after checking their language and alignment.
-- **Article supplied:** use it as the body. Otherwise write just one explanatory sentence and the player—no invented essay or personal experiences.
+- **Article supplied:** use it as the body, editing only as requested. If none is supplied, write a brief, factual introduction and use the body pattern below. Do not invent personal experiences.
 
 Default to English and Portuguese pages unless a specific locale is requested. Both pages use the same two LRC files. English titles must include both original and translated titles: `Construção (Construction) — Chico Buarque`. For an English original, include its Portuguese title translation. Preserve existing slugs and dates when updating a post.
+
+## Body pattern for context-heavy music posts
+
+Use this order:
+
+1. **Introduction:** one concise paragraph with the essential context. For a reaction-oriented post, identify the artist or group and explain why the song matters to the setting or story.
+2. **Player:** put `<!-- lyrics-player -->` on its own line immediately after the introduction.
+3. **Context paragraphs:** write a few short paragraphs in a natural order. Explain the place, people, circumstances, or lyrics only where they help someone understand the song. Weave facts into the prose instead of making a data table, fact dump, or academic essay.
+4. **Optional ending:** add a short song/narrative explanation when useful, then optional further reading, then sources.
+
+Keep the post brief and useful to someone reacting to the song. Use headings only when they help navigation. Keep essential comparisons in the main text; move only supplementary detail into a collapsed panel. Do not add a separate section just to hold facts that fit naturally into a paragraph. Put citations and source links at the end in the compact `:::sources` block shown below; do not pepper the prose with citation markers.
 
 ## Fetch missing lyrics
 

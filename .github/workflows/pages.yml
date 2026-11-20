@@ -5,7 +5,7 @@ on:
     branches: [main]
   pull_request:
   schedule:
-    - cron: '3-58/5 * * * *'
+    - cron: '17 * * * *'
   workflow_dispatch:
     inputs:
       publication_id:
@@ -26,16 +26,18 @@ jobs:
         with:
           node-version: 24
           cache: npm
-      - run: npm ci
       - name: Select publication
         id: publication
         run: node scripts/check-publication.mjs
         env:
           PUBLICATION_ID: ${{ inputs.publication_id }}
+      - run: npm ci
+        if: github.event_name != 'schedule' || steps.publication.outputs.changed == 'true'
       - run: npm run build
         if: github.event_name != 'schedule' || steps.publication.outputs.changed == 'true'
         env:
           BASE_PATH: /
+          VITE_RUNTIME_CONTENT: 'true'
           CONTENT_SOURCE: release
           PUBLICATION_ID: ${{ steps.publication.outputs.id }}
       - run: npm test

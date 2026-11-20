@@ -1,14 +1,24 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { render, routes, routeMetadata, publicPath, alternatePath, siteUrl } from '../.ssr/entry-server.js';
+import { serializeSnapshot } from './html-snapshot.mjs';
+import { render, routes, routeMetadata, publicPath, alternatePath, siteUrl, content } from '../.ssr/entry-server.js';
 const template = fs.readFileSync('dist/index.html', 'utf8');
 const escape = s => s.replaceAll('&', '&amp;').replaceAll('"', '&quot;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
 const absolute = route => siteUrl + publicPath(route);
 function page(route, notFound = false) {
+  const [locale, section, slug] = route.split('/').filter(Boolean);
+  const entry = content.find(e => e.locale === locale && e.section === section && e.slug === slug);
+  const assets = {};
+  for (const file of Object.values(entry?.player?.subtitles ?? {})) {
+    const releaseFile = path.join('.content-release', file);
+    assets[file] = fs.readFileSync(fs.existsSync(releaseFile) ? releaseFile : path.join('public',file),'utf8');
+  }
+  // JSON is inert; escape '<' so user text cannot terminate the script element.
+  const snapshot = Object.keys(assets).length ? `<script id="content-lyrics-snapshot" type="application/json">${serializeSnapshot(assets)}</script>` : '';
   const meta = routeMetadata(route);
   const alternates = ['pt-br', 'en'].map(locale => ({ locale, route: route === '/' ? `/${locale}/` : alternatePath(route, locale).split('?')[0] }));
   const seo = `${notFound ? '<meta name="robots" content="noindex"/>' : `<link rel="canonical" href="${absolute(route)}"/>`}<meta property="og:type" content="website"/><meta property="og:title" content="${escape(meta.title)}"/><meta property="og:description" content="${escape(meta.description)}"/><meta property="og:url" content="${absolute(route)}"/>` + alternates.map(x => `<link rel="alternate" hreflang="${x.locale === 'en' ? 'en' : 'pt-BR'}" href="${absolute(x.route)}"/>`).join('');
-  return template.replace('<body>', notFound ? '<body data-not-found>' : '<body>').replace('__LANG__', meta.locale === 'en' ? 'en' : 'pt-BR').replace('__TITLE__', escape(meta.title)).replace('__DESCRIPTION__', escape(meta.description)).replace('__SEO__', seo).replace('<!--app-html-->', () => render(route));
+  return template.replace('<body>', notFound ? '<body data-not-found>' : '<body>').replace('__LANG__', meta.locale === 'en' ? 'en' : 'pt-BR').replace('__TITLE__', () => escape(meta.title)).replace('__DESCRIPTION__', () => escape(meta.description)).replace('__SEO__', () => seo).replace('</head>', () => snapshot + '</head>').replace('<!--app-html-->', () => render(route, assets));
 }
 for (const route of routes) {
   const output = path.join('dist', route, 'index.html');

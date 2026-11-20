@@ -13,16 +13,16 @@ export const projects = [
 ];
 export const pathFor = (locale: Locale, section = '', slug = '') => `/${locale}/${section ? `${section}/` : ''}${slug ? `${slug}/` : ''}`;
 export const publicPath = (route: string) => `${base.replace(/\/$/, '')}${route}`;
-export function alternatePath(pathname: string, locale: Locale) {
+export function alternatePath(pathname: string, locale: Locale, entries: Entry[] = content) {
   const parts = pathname.split('/').filter(Boolean);
   parts[0] = locale;
-  if (parts.length > 2 && ['blog', 'music'].includes(parts[1]) && !content.some(x => x.locale === locale && x.section === parts[1] && x.slug === parts[2])) return pathFor(locale, parts[1]) + '?translation=missing';
+  if (parts.length > 2 && ['blog', 'music'].includes(parts[1]) && !entries.some(x => x.locale === locale && x.section === parts[1] && x.slug === parts[2])) return pathFor(locale, parts[1]) + '?translation=missing';
   return '/' + parts.join('/') + '/';
 }
-export function routeMetadata(route: string) {
+export function routeMetadata(route: string, entries: Entry[] = content) {
   const [first, section = '', slug] = route.split('/').filter(Boolean);
   const locale: Locale = first === 'en' ? 'en' : 'pt-br';
-  const entry = content.find(x => x.locale === locale && x.section === section && x.slug === slug);
+  const entry = entries.find(x => x.locale === locale && x.section === section && x.slug === slug);
   const project = section === 'portfolio' ? projects.find(x => x.slug === slug) : undefined;
   const labels = locale === 'en' ? { '': 'portfolio', portfolio: 'portfolio', blog: 'blog', music: 'music', experiments: 'experiments', resume: 'résumé', contact: 'contact' } : { '': 'portfólio', portfolio: 'portfólio', blog: 'blog', music: 'música', experiments: 'experimentos', resume: 'currículo', contact: 'contato' };
   return { locale, title: `${entry?.title || project?.name || labels[section as keyof typeof labels] || '404'} · ricardo malosso`, description: entry?.description || project?.[locale].description || (locale === 'en' ? 'Software projects, development notes, music, and experiments by Ricardo Malosso.' : 'Projetos de software, notas de desenvolvimento, música e experimentos de Ricardo Malosso.') };

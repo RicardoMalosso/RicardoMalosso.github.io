@@ -25,7 +25,10 @@ populated database. Preserve every locale, timestamp, note, slug and music asset
 
 Before creating or editing music content, read [docs/music-posts.md](docs/music-posts.md)
 for supported formatting, then use the admin API document format. That older recipe's
-file-edit steps apply only to fixtures/offline content, not live publication.
+file-edit steps apply only to fixtures/offline content, not live publication. For
+context-heavy music posts, use the latest [Racionais post](https://ricardomalosso.github.io/en/music/to-ouvindo-alguem-me-chamar/)
+as the layout example: a concise introduction, then the player, then short paragraphs
+that weave in relevant details. End with optional further reading and compact sources.
 
 ## Authentication and secrets
 

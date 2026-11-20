@@ -1,6 +1,7 @@
-> Admin/API update: see [admin-api.md](admin-api.md). Once enabled, release builds use immutable `content_releases`; normalized tables below are preserved migration archives.
+# Supabase migration archive
 
-# Supabase content
+For production content work, follow [Publish or update a post](admin-api.md#publish-or-update-a-post). The runtime reads published releases from Supabase. The sections below describe the original import, permissions and build before the release-based publisher was introduced.
+
 
 Project: portfolio, São Paulo (`gsuagfvgtoyuwfljsusw`).
 

@@ -40,11 +40,11 @@ https://lrclib.net/api/search?track_name=TITLE&artist_name=ARTIST
 
 Album is optional. Select a matching recording with nonempty `syncedLyrics`. Save that decoded string as UTF-8 LRC, not JSON. `plainLyrics` has no timing. Video intros/outros and live versions can affect the duration match; check synchronization near the beginning, middle, and end. If no suitable timed lyrics exist, report that and request an LRC; never invent timestamps. Honor API retry instructions. Reference: https://lrclib.net/docs
 
-Each file contains only its own language. Translate faithfully, preserving cue order, repetition, and every timestamp. Example: `[00:12.34]Lyric text`. The current parser ignores `[offset:...]` metadata. Save assets locally; published posts need no LRCLIB requests.
+Each file contains only its own language. Translate faithfully, preserving cue order, repetition, and every timestamp. Example: `[00:12.34]Lyric text`. The current parser ignores `[offset:...]` metadata. Store each LRC string in the document’s `assets` map; published posts need no LRCLIB requests.
 
-## Files and complete template
+## Music document fields
 
-Create `content/music/<slug>.en.md` and, when applicable, `<slug>.pt-br.md`. Put lyrics at `public/lyrics/<slug>/en.lrc` and `public/lyrics/<slug>/pt-br.lrc`.
+Use one Supabase document with section `music`, a shared slug, localized `entries` and an `assets` map. Each entry includes its section, slug, locale, metadata and Markdown `body`. The example below illustrates one entry in frontmatter form. Store the two LRC strings under the exact keys referenced by `player.subtitles`.
 
 ```markdown
 ---
@@ -54,7 +54,6 @@ slug: "song-slug"
 locale: "en"
 date: "YYYY-MM-DD"
 tags: ["Lyrics"]
-draft: false
 artist: "Artist"
 originalLanguage: "pt-BR"
 player:
@@ -76,7 +75,7 @@ Replace all placeholders. For Portuguese, localize title, description, body, and
 - `tags` drive visible labels and filters. Reuse relevant existing spelling/capitalization, e.g. `MPB`, `Lyrics`, `Brazilian music`.
 - `artist` displays the performer. `originalLanguage` records the source language; it does not change the player's supported EN/PT pair.
 - Optional `credits: "Verified songwriting, performance, or translation credits."` displays plain text after the player/article.
-- `draft: true` excludes the page from publication. Both subtitle paths must exist, relative to `public/`, without a leading slash.
+- Saving creates a draft. Both subtitle paths must exist in the document’s assets map.
 - Use one player marker, outside panels/notes/code. Without it, the player follows the body. Existing controls and responsive styling apply automatically.
 - Optional `player.offsetMs` sets the starting lyrics timing offset in milliseconds (integer, from -60000 to 60000; default `0`). Positive values display lyrics later than the video's playback, negative values earlier. Put it alongside `youtubeUrl` when a recording needs adjustment, in both locale posts (e.g. `offsetMs: 1000` delays the lyrics by one second). Viewers can still adjust timing manually; **Reset** restores this configured default. Do not modify LRC timestamps to achieve a per-recording sync adjustment.
 - Legacy inline `lyrics` metadata is unnecessary for normal new posts. There are no supported per-post cover or player-layout fields; don't invent them.
@@ -126,12 +125,6 @@ Use `:::panel Title` to start open. Do not nest panels or place the player insid
 
 Images belong in `public/images/`, referenced as `![Useful alt text](/images/file.ext)`. Internal links include the base and locale: `[Related song](/en/music/apesar-de-voce/)`. Add sources, related songs, or contextual sections only when supplied or requested.
 
-## Validate
+## Save, publish and verify
 
-Run `npm run build` then `npm test` with dependencies installed. Check both requested routes, titles, lyric languages/timing, and any formatting used. Inspect the diff for placeholders and unrelated edits. Do not modify player code for ordinary content additions.
-
-During development, run `npm run content` or restart `npm run dev` after Markdown edits. Never edit generated JSON or `dist/` directly. Commit source Markdown and lyrics; follow the user's publishing instructions. Summarize changed pages and checks briefly.
-
-Optional lyric mouseovers: add a top-level `lyricNotes` array with `time: "00:24.57"`, `language: "en"` (or `pt-br`), exact `text: "Eating"`, and `explanation: "Your note"`. Use the original LRC timestamp. Repeat in each localized post; keep multiple notes on a cue in text order. LRC files remain plain text.
-
-The player’s “Fullscreen with lyrics” control expands the video with a compact bilingual lyric overlay. YouTube’s iframe fullscreen button is disabled so lyrics remain visible. Exit via the page control or the browser’s fullscreen exit; the normal lyric layout is preserved. This requires browser support for element fullscreen.
+Follow [Publish or update a post](admin-api.md#publish-or-update-a-post). For lyric edits, compare cue timestamps, translations and notes on both language pages. For a new song, also check its listing in each requested locale.

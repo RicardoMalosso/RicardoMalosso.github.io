@@ -5,7 +5,7 @@
 Repository: `RicardoMalosso/RicardoMalosso.github.io`; production is GitHub Pages at
 https://ricardomalosso.github.io/. Prefer connected GitHub tools for remote reads,
 commits, PRs and workflow checks. Fetch current refs and inspect commits before
-editing. Preserve other people's fixes. Admin/API work is on `feat/admin-api`;
+editing. Preserve other people's fixes. Base new work on current `main`;
 do not merge or deploy the frontend until the user requests it.
 
 ## Database access and content
@@ -24,8 +24,7 @@ expecting the release-based build to change. Never rerun initial imports on a
 populated database. Preserve every locale, timestamp, note, slug and music asset.
 
 Before creating or editing music content, read [docs/music-posts.md](docs/music-posts.md)
-for supported formatting, then use the admin API document format. That older recipe's
-file-edit steps apply only to fixtures/offline content, not live publication. For
+for supported formatting, then use the admin API document format. For
 context-heavy music posts, use the latest [Racionais post](https://ricardomalosso.github.io/en/music/to-ouvindo-alguem-me-chamar/)
 as the layout example: a concise introduction, then the player, then short paragraphs
 that weave in relevant details. End with optional further reading and compact sources.
@@ -49,7 +48,7 @@ Run `npm run build` and `npm test` after code changes. Test a cloud publication 
 The build pins a single release so related post/lyric records cannot drift mid-build.
 Tests must use generated entries for live routes and portable temporary directories.
 
-Publish or archive through the owner API. Verify the latest public content_manifest and
+For new posts and edits, follow [Publish or update a post](docs/admin-api.md#publish-or-update-a-post). Fetch the current draft before editing, save the complete document with its revision, validate, then publish when requested. Archive through the owner API. Verify the latest public content_manifest and
 content_document RPCs, including localized entries and lyric assets. The live browser
 refreshes from those RPCs. A Pages build is unnecessary for a content correction.
 New URLs gain static HTTP 200 responses, social metadata and sitemap entries at the

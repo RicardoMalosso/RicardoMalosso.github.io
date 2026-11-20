@@ -2,7 +2,7 @@
 
 ## Local development (Windows PowerShell)
 
-Work on `feat/admin-api`, with Node 24 installed:
+Use Node 24 on a branch based on current `main`.
 
 ```powershell
 npm ci
@@ -22,9 +22,7 @@ can self-grant access using editable profile fields. An owner removed from
 `site_admins` stays denied and does not automatically regain access. The owner
 binding must only be changed through trusted database administration.
 
-The working branch is not production until merged. The hosted API/migration can be
-prepared independently; publishing a release on this branch will not update Pages
-until the release-based workflow reaches main. For local release builds:
+Local admin actions use the hosted database. To preview a published snapshot locally:
 
 ```powershell
 $env:CONTENT_SOURCE = 'release'
@@ -34,6 +32,15 @@ npm run preview
 ```
 
 Remove the override using `Remove-Item Env:CONTENT_SOURCE` to return to file mode.
+
+## Publish or update a post
+
+In the [content studio](https://ricardomalosso.github.io/admin/), create or select a post, save the draft, then select **publish** when publication is requested. For scripts, use the authenticated endpoints below.
+
+1. **Create** with `POST /posts` and a complete document. **Update** by finding the section and slug in `GET /posts`, then reading `GET /posts/{id}`. Edit the returned working document and send `PATCH /posts/{id}` with `{document, revision}`. Preserve other edits, locales, notes and lyric assets. On HTTP 409, reread and reapply your change.
+2. Use `POST /posts/{id}/validate` and check that `errors` is empty. A saved draft is private. To publish, send `POST /posts/{id}/publish` with the revision returned by the save. Use a fresh idempotency key for each create or publish operation and reuse that key when retrying the same request.
+3. Keep the release ID returned by publish. Using the public Supabase API, call `content_manifest({known_id: null})`, check the requested locales, then call `content_document({release_id, post_section, post_slug})` with that manifest's ID. Verify the edited fields and any affected lyrics against the request. If a later release is current, verify the change in that release.
+4. Reload the public article and check the edited text. For a new song, also check both language listings and links. GitHub Pages refreshes static HTML, social previews and the sitemap hourly. Trigger a Pages build only if an immediate static refresh is required. A new direct URL can render in the browser while still returning HTTP 404 until that refresh.
 
 ## API
 

@@ -6,7 +6,7 @@ Ricardo Malosso’s bilingual portfolio, blog, music pages, and browser experime
 
 ## Stack
 
-React + TypeScript, Vite, React Router, i18next / react-i18next, and Markdown with GFM. The build renders every known route to HTML with React DOM Server. React hydrates those files in the browser for client navigation and interactions. Published blog/music content is managed in Supabase and fetched during the Pages build; visitors receive static pages. See [Supabase content](docs/supabase-content.md) for import verification, access, and rollback.
+React + TypeScript, Vite, React Router, i18next / react-i18next, and Markdown with GFM. The build renders every known route to HTML with React DOM Server. React hydrates those files in the browser for client navigation and interactions. Visitors receive prerendered HTML, then the browser checks Supabase for published updates. See [Supabase content](docs/supabase-content.md) for import verification, access, and rollback.
 
 ## Run locally
 
@@ -33,7 +33,7 @@ Open `/pt-br/` or `/en/`. Markdown is compiled before dev starts; after editing 
 2. Push to `main`. `.github/workflows/pages.yml` installs pinned dependencies with `npm ci`, checks TypeScript, builds, runs export checks, and deploys `dist/`.
 3. PRs build and test without deploying. You can also run the workflow manually from Actions.
 
-`vite.config.ts` defaults to `/`. `BASE_PATH=/ npm run build` produces a root-hosted export for a future custom domain. Update `siteUrl` in `src/data.ts` at the same time. No SPA rewrite service is required: every published content route has its own `index.html`, and unknown routes receive GitHub Pages’ native 404.
+`vite.config.ts` defaults to `/`. `BASE_PATH=/ npm run build` produces a root-hosted export for a future custom domain. Update `siteUrl` in `src/data.ts` at the same time. No SPA rewrite service is required: every prerendered route has its own `index.html`, and unknown routes receive GitHub Pages’ native 404.
 
 ## Structure
 
@@ -56,28 +56,13 @@ Open `/pt-br/` or `/en/`. Markdown is compiled before dev starts; after editing 
 
 For music posts, follow [the music-post recipe](docs/music-posts.md), including YouTube/LRC inputs, bilingual titles, and formatting.
 
-Create a Markdown file in `content/blog/` or `content/music/`:
-
-```yaml
----
-title: "Your title"
-description: "A short description for the listing and search previews."
-slug: "your-post"
-locale: "en"
-date: "2026-10-27"
-tags: ["Development"]
-draft: false
----
-Your Markdown content.
-```
-
-Create the other language’s file with the **same section and slug**, and `locale: "pt-br"`. Filenames are for organization; the frontmatter controls the URL. Dates must be quoted ISO dates. Drafts are excluded from listings, routes, and sitemaps. Markdown accepts headings, links, images, code blocks, lists, and GFM tables. Raw HTML is disabled.
+For blog posts and music corrections, follow [Publish or update a post](docs/admin-api.md#publish-or-update-a-post). The repository Markdown and lyric files are offline fixtures.
 
 The language switch preserves the article when its translation exists. Otherwise, it links to the other language’s section with an explanatory notice. The initial language is chosen from a saved preference, then the browser language; explicit language URLs always win. Without JavaScript, the root page provides links to both languages and all prerendered content remains readable.
 
 ## Reusable lyrics player for music and blog posts
 
-Copy `templates/lyrics-post.md` as a starting point, or add a `player` block to any Markdown post in `content/music/` or `content/blog/`:
+For offline fixtures, copy `templates/lyrics-post.md` as a starting point, or add a `player` block to any Markdown post in `content/music/` or `content/blog/`:
 
 ```yaml
 player:

@@ -124,7 +124,9 @@ tables. The first check covered 24 documents, 46 translations and 46 lyric asset
 for an unchanged-version response, and at most 26,226 bytes for one document. These
 are JSON payload sizes, not measured end-to-end latency or compressed transfer sizes.
 
-## Activation after review
+## Deployment and recovery
+
+Production uses the hosted read migration and runtime-enabled Pages build. For content changes, follow [Publish or update a post](admin-api.md#publish-or-update-a-post). To reproduce the deployment in another environment:
 
 1. Pass file-source and current-release builds, SQL isolation tests and browser CI.
 2. Review payload sizes and limitations above. Preserve current database history.

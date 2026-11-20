@@ -2293,40 +2293,6 @@ main:focus {
     margin: 10px 0
 }
 
-.hover-hint {
-    position: fixed;
-    z-index: 20;
-    width: 130px;
-    height: auto;
-    pointer-events: none;
-    animation: hover-hint-enter .55s ease-out both;
-    transition: transform .4s ease-in, opacity .4s ease-in
-}
-
-.hover-hint.is-leaving {
-    animation: none;
-    transform: translateX(-110vw);
-    opacity: 0
-}
-
-@keyframes hover-hint-enter {
-    from {
-        transform: translateX(-110vw);
-        opacity: 0
-    }
-
-    to {
-        transform: translateX(0);
-        opacity: 1
-    }
-}
-
-@media(prefers-reduced-motion:reduce) {
-    .hover-hint {
-        animation: none;
-        transition: none
-    }
-}
 /* Lift an annotated lyric row above sibling rows while its note is visible. */
 .sync-row:has(.post-note:hover),
 .sync-row:has(.post-note:focus-within),

@@ -6,7 +6,6 @@ on:
   pull_request:
   schedule:
     - cron: '3-58/5 * * * *'
-  # Use a fresh run for each publication; rerunning a build creates a duplicate Pages artifact.
   workflow_dispatch:
     inputs:
       publication_id:
@@ -44,8 +43,10 @@ jobs:
       - uses: actions/upload-pages-artifact@v3
         if: github.event_name != 'schedule' || steps.publication.outputs.changed == 'true'
         with:
+          name: github-pages-${{ github.run_attempt }}
           path: dist
     outputs:
+      artifact_name: github-pages-${{ github.run_attempt }}
       changed: ${{ steps.publication.outputs.changed }}
   deploy:
     if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request' && (github.event_name != 'schedule' || needs.build.outputs.changed == 'true')
@@ -62,3 +63,5 @@ jobs:
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4
+        with:
+          artifact_name: ${{ needs.build.outputs.artifact_name }}

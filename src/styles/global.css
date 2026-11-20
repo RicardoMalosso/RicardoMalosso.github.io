@@ -639,6 +639,30 @@ time,
     margin: 25px 0 15px
 }
 
+.prose .post-sources {
+    margin-top: 30px;
+    padding-top: 16px;
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.6
+}
+
+.prose .post-sources h3 {
+    font-size: 15px;
+    margin: 0 0 10px;
+    letter-spacing: 0
+}
+
+.prose .post-sources ul,
+.prose .post-sources ol {
+    margin: 0 0 10px
+}
+
+.prose .post-sources li {
+    margin-bottom: 5px
+}
+
 .prose a {
     color: var(--accent);
     text-decoration: underline

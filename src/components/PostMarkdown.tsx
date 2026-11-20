@@ -94,6 +94,7 @@ export default function PostMarkdown({children}: {children:string}) {
     if(code){if(!fence)fence=code[1][0];else if(fence===code[1][0])fence='';}
     const match=!fence&&lines[i].match(/^:::panel(-collapsed)?\s+(.+)$/);
     if(match){const end=lines.findIndex((line,index)=>index>i&&line.trim()===':::');if(end>=0){flush();blocks.push(<Panel key={blocks.length} title={match[2]} defaultOpen={!match[1]} notes={notes} body={lines.slice(i+1,end).join('\n')}/>);i=end;continue;}}
+    if(!fence&&lines[i].trim()===':::sources'){const end=lines.findIndex((line,index)=>index>i&&line.trim()===':::');if(end>=0){flush();blocks.push(<aside key={blocks.length} className="post-sources"><Markdown text={lines.slice(i+1,end).join('\n')} notes={notes}/></aside>);i=end;continue;}}
     normal.push(lines[i]);
   }
   flush();return <>{blocks}</>;

@@ -93,6 +93,16 @@ A **Markdown** explanation, with paragraphs or lists.
 
 Use unique note IDs. Keep the reference and definition on the same side of the player marker. Define notes outside panels. Inline `(# ...)` syntax requires whitespace after `#` and balanced parentheses. Dotted underlines, positioning, keyboard/tap behavior, and the desktop arrow hint are automatic.
 
+Compact sources section (small font, visible by default):
+
+```markdown
+:::sources
+### Sources
+
+- [Statistical source](https://example.org) — what it supports.
+:::
+```
+
 Collapsed supplementary section:
 
 ```markdown

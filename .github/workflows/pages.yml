@@ -6,6 +6,7 @@ on:
   pull_request:
   schedule:
     - cron: '3-58/5 * * * *'
+  # Use a fresh run for each publication; rerunning a build creates a duplicate Pages artifact.
   workflow_dispatch:
     inputs:
       publication_id:
